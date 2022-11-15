@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>wallpaper.jpg</file>
+        <file>Dock.qml</file>
+        <file>ContextMenus/DesktopContextMenu.qml</file>
+        <file>ContextMenus/TaskBarContextMenu.qml</file>
+        <file>Chrome.qml</file>
+        <file>ContextMenus/CustomContextMenuBase.qml</file>
+        <file>assets/startmenuleftright.png</file>
+        <file>assets/startmenurightcenter.png</file>
+        <file>assets/startmenurightleft.png</file>
+        <file>icons/minimize.png</file>
+        <file>CMakeLists.txt</file>
+        <file>qml.qrc</file>
+        <file>StartMenuLeftPaneButton.qml</file>
+        <file>StartMenuRightIconButton.qml</file>
+        <file>win7.qml</file>
+    </qresource>
+</RCC>

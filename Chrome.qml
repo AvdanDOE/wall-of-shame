@@ -24,6 +24,354 @@ import QtQuick.Window 2.3
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
 
-Item{
+Rectangle{
+    color:"transparent"
+    border.color:"#88000000"
+    border.width: 5
+    x:200
+    y:200
+    id:windowRect
+    property int windowIndex:index
+    width:640
+    height:480
+    radius:5
+    //![mouseResizeHelpers]
+    Item{
+        anchors.fill: parent
+        //TopEdge
+        MouseArea{
+            width:parent.width-10
+            x:5
+            y:0
+            height:1
+            cursorShape: Qt.SizeVerCursor
+            Item{
+                id:topEdgeTarget
+                anchors.fill: parent
+            }
+            drag.target: topEdgeTarget
+            drag.axis: Drag.YAxis
+            onMouseYChanged: {
+                if(drag.active){
+                    windowRect.y = windowRect.y + mouseY;
+                    windowRect.height = windowRect.height - mouseY;
+                }
+            }
+        }
+        //BottomEdge
+        MouseArea{
+            width:parent.width-10
+            x:5
+            y:parent.height-1
+            height:1
+            cursorShape: Qt.SizeVerCursor
+            Item{
+                id:bottomEdgeDragTarget
+                anchors.fill: parent
+            }
+            drag.target:bottomEdgeDragTarget
+            drag.axis: Drag.YAxis
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.height = windowRect.height+mouseY;
+                }
+            }
+        }
+        //LeftEdge
+        MouseArea{
+            height:parent.height-10
+            x:0
+            y:5
+            width: 1
+            Item{
+                id:leftEdgeDragTarget
+                anchors.fill: parent
+            }
+            drag.target:leftEdgeDragTarget
+            drag.axis: Drag.XAxis
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width - mouseX;
+                    windowRect.x = windowRect.x + mouseX;
+                }
+            }
+            cursorShape: Qt.SizeHorCursor
+        }
+        //RightEdge
+        MouseArea{
+            height:parent.height-10
+            x:parent.width-1
+            width:1
+            y:5
+            Item{
+                id:rightEdgeDragTarget
+                anchors.fill: parent
+            }
+            cursorShape: Qt.SizeHorCursor
+            drag.target:rightEdgeDragTarget
+            drag.axis: Drag.XAxis
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width+mouseX;
+                }
+            }
+        }
+        //Top Left Corner
+        MouseArea{
+            width:5
+            x:0
+            y:0
+            height:5
+            Item{
+                anchors.fill: parent
+                id:topLeftCornerDragTarget
+            }
+            cursorShape: Qt.SizeFDiagCursor
+            drag.target:topLeftCornerDragTarget
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width - mouseX
+                    windowRect.x = windowRect.x + mouseX
+                }
+            }
+            onMouseYChanged: {
+                if(drag.active){
+                    windowRect.height = windowRect.height - mouseY
+                    windowRect.y = windowRect.y + mouseY
+                }
+            }
+        }
+        //Top Right Corner
+        MouseArea{
+            height:5
+            x:parent.width-5
+            y:0
+            width: 5
+            cursorShape: Qt.SizeBDiagCursor
+            Item{
+                id:topRightCornerDragTarget
+                anchors.fill: parent
+            }
+            drag.target:topRightCornerDragTarget
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width + mouseX;
+                }
+            }
+            onMouseYChanged: {
+                if(drag.active){
+                    windowRect.height = windowRect.height - mouseY;
+                    windowRect.y = windowRect.y + mouseY;
+                }
+            }
+        }
+        //Bottom Left Corner
+        MouseArea{
+            height:5
+            x:0
+            width:5
+            y:parent.height-5
+            cursorShape: Qt.SizeBDiagCursor
+            Item{
+                id:bottomLeftCornerDragTarget
+                anchors.fill: parent
+            }
+            drag.target:bottomRightCornerDragTarget
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width - mouseX;
+                    windowRect.x = windowRect.x + mouseX;
+                }
+            }
+            onMouseYChanged: {
+                if(drag.active){
+                    windowRect.height = windowRect.height+mouseY;
+                }
+            }
+        }
+        //Bottom Right Corner
+        MouseArea{
+            height:5
+            x:parent.width-5
+            y:parent.height-5
+            width:5
+            cursorShape: Qt.SizeFDiagCursor
+            Item{
+                id:bottomRightCornerDragTarget
+                anchors.fill: parent
+            }
+            drag.target:bottomRightCornerDragTarget
+            onMouseXChanged: {
+                if(drag.active){
+                    windowRect.width = windowRect.width+mouseX;
+                }
+            }
+            onMouseYChanged: {
+                if(drag.active){
+                    windowRect.height = windowRect.height+mouseY;
+                }
+            }
+        }
+    }
+    //![mouseResizeHelpers]
+    Rectangle{
+        id:titleBar
+        x:parent.border.width
+        width:parent.width-10
+        y:parent.border.width
+        height:35
+        color:"#88000000"
+        //Title Bar Draging
+        MouseArea{anchors.fill: titleBar;drag.target: windowRect}
 
+        //Window Controls
+        Rectangle{
+            anchors.right: parent.right
+            height:30
+            color:"#20ffffff"
+            width:100
+            radius:5
+            id:windowControlsRect
+            RowLayout{
+                spacing:5
+                anchors.fill: parent
+                Button{
+                    implicitWidth: parent.height
+                    implicitHeight: parent.height
+                    background:Rectangle{
+                        color:"transparent"
+                    }
+                    padding:0
+                    icon.color:"white"
+                    icon.width:32
+                    icon.cache: true
+                    icon.height:32
+                    icon.name:"window-maximize-symbolic"
+                }
+                Button{
+                    implicitWidth: parent.height
+                    implicitHeight: parent.height
+                    padding:0
+                    background:Rectangle{
+                        color:"transparent"
+                    }
+                    icon.color:"white"
+                    icon.cache: true
+                    icon.width:32
+                    icon.height:32
+                    icon.name:"window-minimize-symbolic"
+                }
+                Button{
+                    implicitWidth: parent.height
+                    padding:0
+                    implicitHeight: parent.height
+                    background:Rectangle{
+                        color:"transparent"
+                    }
+                    icon.color:"white"
+                    icon.width:32
+                    icon.cache: true
+                    icon.height:32
+                    icon.name:"window-close-symbolic"
+                }
+            }
+        }
+
+        //Tabs
+        TabBar{
+            x:0
+            y:0
+            height:parent.height-5
+            //width:parent.width-(windowControlsRect.width+5)
+            background: Rectangle{color:"transparent"}
+            spacing:5
+            id:windowTabBar
+            Repeater{
+                model:modelData
+                property alias tabModel:tabRepeater.model
+                id:tabRepeater
+                TabButton{
+                    property int windowIndex:index
+                    width:titleLabel.width+80 > 150 ? titleLabel.width+100 : 150
+                    height:30
+                    spacing:5
+                    Label{
+                        id:titleLabel
+                        anchors.centerIn: parent
+                        text:modelData.toplevel.title
+                        color:"white"
+                        //font.pixelSize: 17
+                    }
+                    Button{
+                        padding:3
+                        anchors.right: parent.right
+                        height:30
+                        width:30
+                        background:Item{}
+                        icon.color: "white"
+                        icon.name: "window-close-symbolic"
+
+                        icon.width: 24
+                        icon.height: 24
+                        icon.cache: true
+
+                    }
+                    Button{
+                        padding:3
+                        width:30
+                        height:30
+                        icon.name:modelData.toplevel.appId
+                        icon.width: 24
+                        icon.height: 24
+                        background:Item{}
+                        icon.color: "transparent"
+                        enabled: false
+                        x:0
+                        y:0
+                    }
+
+                    text:" " //Workaround to keep things normal :(
+                    background: Rectangle{
+                        color:"#20ffffff"
+                        radius:5
+                        width:parent.width
+                    }
+                }
+            }
+        }
+    }
+    StackLayout{
+        id:windowStack
+        width: parent.width-10
+        height:parent.height-45
+        x:5
+        y:40
+        currentIndex: windowTabBar.currentIndex
+        Repeater{
+            property alias stackModel:stackRepeater.model
+            id:stackRepeater
+            model:modelData
+            ShellSurfaceItem{
+                property int stackIndex:index
+                shellSurface: modelData
+                onWidthChanged: {
+                    modelData.toplevel.sendConfigure(Qt.size(windowStack.width,windowStack.height),XdgSurface);
+                }
+                onHeightChanged: {
+                    modelData.toplevel.sendConfigure(Qt.size(windowStack.width,windowStack.height),XdgSurface);
+                }
+                Component.onCompleted: {
+                    modelData.toplevel.sendConfigure(Qt.size(windowStack.width,windowStack.height),XdgSurface);
+                }
+                sizeFollowsSurface: true
+                //onSurfaceDestroyed:
+                //onActiveFocusChanged: {if(modelData.toplevel.activated){
+                //    windowRect.z = 1;}
+                //else
+                //    {windowRect.z = 0;}
+                //}
+
+            }
+        }
+    }
 }

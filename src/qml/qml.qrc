@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>../../temporary-testing-assets/wallpaper.jpg</file>
+        <file>Dock.qml</file>
+        <file>ContextMenus/DesktopContextMenu.qml</file>
+        <file>ContextMenus/TaskBarContextMenu.qml</file>
+        <file>Chrome.qml</file>
+        <file>ContextMenus/CustomContextMenuBase.qml</file>
+    </qresource>
+</RCC>

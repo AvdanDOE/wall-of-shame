@@ -40,7 +40,7 @@ WaylandCompositor{
             visible:true
             Image {
                 id: wallpaper
-                source: "qrc:/wallpaper.jpg"
+                source: "qrc:/../../temporary-testing-assets/wallpaper.jpg"
                 anchors.fill: parent
                 cache: true
                 fillMode: Image.PreserveAspectCrop

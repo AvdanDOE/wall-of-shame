@@ -23,7 +23,6 @@ import QtQuick.Controls 2.5
 CustomContextMenuBase
 {
     x:(parent.width/2)-(width/2)
-    y:pinnedApp.y-(height+10)
     Action { text: qsTr("Open in New Window"); }
     Action { text: qsTr("Unpin from the TaskBar");onTriggered: taskBarEntries.remove(index) }
     MenuSeparator{contentItem: Rectangle{color:"white";implicitHeight: 1}}

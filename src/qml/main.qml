@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.3
 import QtWayland.Compositor 1.15
 import QtGraphicalEffects 1.15
+import QtMultimedia 5.15
 import "ContextMenus" as CM
 
 WaylandCompositor{
@@ -35,42 +36,129 @@ WaylandCompositor{
         window:Window{
             width:1280
             height:720
-            title:"CFWM"
+            title:"IgniteShell"
             visibility: "FullScreen"
             visible:true
-            Image {
-                id: wallpaper
-                source: "qrc:/../../temporary-testing-assets/wallpaper.jpg"
-                anchors.fill: parent
-                cache: true
-                fillMode: Image.PreserveAspectCrop
+            WaylandMouseTracker{
+                id: mouseTracker
+                width:parent.width
+                height:parent.height
+                windowSystemCursorEnabled: true
+                Item{
+                    id:wmArea
+                    anchors.fill:parent
+                    Item{
+                        id:wallpaper
+                        anchors.fill: parent
+                        /*
+                        Item{
+                            Component.onCompleted: {resetTimer.start()}
+                            id:dynamicWallpaper
+                            anchors.fill: parent
+                            Timer {
+                                id: resetTimer
+                                interval: 5000
+                                onTriggered: {
+                                    nightWallp.opacity = 1;
+                                    dayWallp.opacity = 0;
+                                }
+                            }
+
+                            Image {
+                                id: nightWallp
+                                source:"file:///home/yegender/HDD/MyFiles/Downloads/isodark.png"
+                                anchors.fill: parent
+                                cache: true
+                                opacity: 0
+                                Behavior on opacity{
+
+                                    NumberAnimation {
+                                        from: 0
+                                        to: 1
+                                        duration: 2000
+
+                                    }
+                                }
+                                fillMode: Image.PreserveAspectCrop
+                            }
+                            Image {
+                                id: dayWallp
+                                //source: "file:///home/yegender/Pictures/ghost.png"
+                                //source:"file:///home/yegender/Downloads/Windows 20 Concept - Dark Mode.png"
+                                source:"file:///home/yegender/HDD/MyFiles/Downloads/isolight.png"
+                                anchors.fill: parent
+                                cache: true
+                                Behavior on opacity {
+                                    NumberAnimation{
+                                        from: 1
+                                        to: 0
+                                        duration: 2000
+                                        onRunningChanged: {
+                                            console.log(running)
+                                        }
+                                    }
+
+                                }
+                                visible: true
+                                fillMode: Image.PreserveAspectCrop
+                            }
+                        }
+                        */
+                        Image {
+                            id: staticWallpaper
+                            anchors.fill: parent
+                            source:"qrc:/../../temporary-testing-assets/wallpaper.jpg"
+                            fillMode:Image.PreserveAspectCrop
+                        }
+                        /*
+                        Video{
+                            source:"file:///home/yegender/HDD/MyFiles/Downloads/wall.mp4"
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+                            Component.onCompleted: {
+                                play();
+                            }
+                            onStopped: {seek(0);play()}
+                            muted: true
+                            id:videoWallpaper
+                        }
+                        */
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        acceptedButtons:Qt.RightButton
+                        onClicked: menu.popup()
+                        CM.DesktopContextMenu{id:menu}
+                    }
+                    Repeater{
+                        model:shellSurfaces
+                        property alias windowModel:windowRepeater.model
+                        id:windowRepeater
+                        Chrome{}
+                    }
+                }
+                Dock{
+                    y:parent.height-(height+10)
+                    x:(parent.width/2)-(width/2)
+
+                }
             }
-            MouseArea{
-                anchors.fill: parent
-                acceptedButtons:Qt.RightButton
-                onClicked: menu.popup()
-                CM.DesktopContextMenu{id:menu}
-            }
-            Repeater{
-                model:shellSurfaces
-                property alias windowModel:windowRepeater.model
-                id:windowRepeater
-            }
-            Dock{}
-            ListModel{
-                id:aa
-                ListElement{bb:[ListElement{cc:"dd"},
-                                ListElement{cc:"dd"}]}
-                ListElement{bb:[ListElement{cc:"dd"},
-                                ListElement{cc:"dd"}]}
-            }
-            Component.onCompleted: {aa.get(0)}
         }
     }
     //<models>
-    ListModel { id: shellSurfaces }
-    ListModel{
+    ListModel { id: shellSurfaces
+        //ListElement{                         //For testing Tabs uncomment this
+        //    tabs:[]
+        //}
+    }
+    ListModel{                 //Dummy taskbar pinned list
         id:taskBarEntries
+        ListElement{
+            name:"Brave"
+            cicon:"brave"
+            exec:"brave"
+        }
+
         ListElement{
             name:"Music aka Elisa"
             cicon:"elisa"
@@ -79,57 +167,32 @@ WaylandCompositor{
         ListElement{
             name:"File Manager aka Dolphin"
             cicon:"org.kde.dolphin"
-            exec:"dolphin -platform wayland"
+            exec:"dolphin"
         }
         ListElement{
             name:"Konsole aka Konsole"
             cicon:"konsole"
-            exec:"konsole -platform wayland"
+            exec:"konsole"
         }
         ListElement{
             name:"Calculator aka KCalc"
             cicon:"kcalc"
-            exec:"kcalc -platform wayland"
+            exec:"kcalc"
         }
         ListElement{
             name:"QtCreator"
             cicon:"qtcreator"
-            exec:"qtcreator -platform wayland"
+            exec:"qtcreator"
         }
         ListElement{
             name:"Text Editor aka Kate"
             cicon:"kate"
-            exec:"kate -platform wayland"
+            exec:"kate"
         }
         ListElement{
             name:"KDevelop"
             cicon:"kdevelop"
-            exec:"kdevelop -platform wayland"
-        }
-        ListElement{
-            name:"Builder"
-            cicon:"builder"
-            exec:"builder"
-        }
-        ListElement{
-            name:"GParted"
-            cicon:"gparted"
-            exec:"gparted"
-        }
-        ListElement{
-            name:"Inkscape"
-            cicon:"inkscape"
-            exec:"inkscape"
-        }
-        ListElement{
-            name:"GIMP"
-            cicon:"gimp"
-            exec:"gimp"
-        }
-        ListElement{
-            name:"Virtualbox"
-            cicon:"virtualbox"
-            exec:"virtualbox -platform wayland"
+            exec:"kdevelop"
         }
     }
     //</models>
@@ -138,7 +201,7 @@ WaylandCompositor{
     XdgShell {
         onToplevelCreated:{
             shellSurfaces.append({tabs:[{shellSurface:xdgSurface}]});
-            //xdgSurface.sendConfigure(Qt.size(windowStack.width,windowStack.height),XdgSurface);
+            //shellSurfaces.get(0).tabs.append({shellSurface:xdgSurface});             //Just for testing Tabs. Until proper drag and drop is implemented
         }
     }
     XdgDecorationManagerV1 {

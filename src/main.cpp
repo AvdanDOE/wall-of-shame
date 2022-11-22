@@ -19,7 +19,7 @@
 
 #include <QtCore/QUrl>
 #include <QtCore/QDebug>
-
+#include "process.h"
 #include <QtGui/QGuiApplication>
 
 #include <QtQml/QQmlApplicationEngine>
@@ -27,7 +27,7 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
+    qmlRegisterType<Process>("Process", 1, 0, "Process");
     QQmlApplicationEngine appEngine(QUrl("qrc:/main.qml"));
 
     return app.exec();
